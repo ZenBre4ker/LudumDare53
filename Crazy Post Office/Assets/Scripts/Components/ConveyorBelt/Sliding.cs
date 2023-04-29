@@ -18,7 +18,7 @@ public class Sliding : MonoBehaviour
         //parentTransform = GetComponentInParent<Transform>();
         resetMovePosition = transform.localPosition;
 
-        localMoveDelta = new Vector3(0.04f/transform.lossyScale.x, 0, 0);
+        localMoveDelta = new Vector3(0.4f/transform.lossyScale.x, 0, 0);
     }
 
     // Update is called once per frame
