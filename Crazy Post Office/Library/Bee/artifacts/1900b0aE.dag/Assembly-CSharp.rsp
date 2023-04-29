@@ -114,7 +114,7 @@
 -define:ENABLE_TERRAIN
 -define:ENABLE_TILEMAP
 -define:ENABLE_TIMELINE
--define:ENABLE_LEGACY_INPUT_MANAGER
+-define:ENABLE_INPUT_SYSTEM
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
 -r:"C:/Programmieren/Unity/2021.3.5f1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreModule.dll"
@@ -324,6 +324,7 @@
 -r:"D:/Github/LudumDare53/Crazy Post Office/Library/PackageCache/com.unity.testtools.codecoverage@1.0.1/lib/ReportGenerator/ReportGeneratorMerged.dll"
 -r:"D:/Github/LudumDare53/Crazy Post Office/Library/PackageCache/com.unity.visualscripting@1.7.8/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.EditorCoroutines.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Performance.Profile-Analyzer.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.PlasticSCM.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Rider.Editor.ref.dll"
@@ -349,9 +350,13 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
-"Assets/Scripts/ConveyorBelt/Sliding.cs"
-"Assets/Scripts/Spring/Spring.cs"
-"Assets/Scripts/Utility/Trigger.cs"
+"Assets/Scripts/Components/ConveyorBelt/Sliding.cs"
+"Assets/Scripts/Components/Spring/Spring.cs"
+"Assets/Scripts/Components/Utility/Trigger.cs"
+"Assets/Scripts/Levels/LevelIdentification.cs"
+"Assets/Scripts/Levels/PacketIdentification.cs"
+"Assets/Scripts/Manager/LevelEditor.cs"
+"Assets/Scripts/Manager/PackageManager.cs"
 -langversion:9.0
 
 /deterministic

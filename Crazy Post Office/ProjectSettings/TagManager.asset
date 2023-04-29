@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Package
+  - PackageSpawn
+  - PackageGoal
+  - LevelSetup
+  - Editable
   layers:
   - Default
   - TransparentFX

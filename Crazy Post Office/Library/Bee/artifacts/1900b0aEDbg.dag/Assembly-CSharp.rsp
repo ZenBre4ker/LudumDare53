@@ -324,6 +324,7 @@
 -r:"D:/Github/LudumDare53/Crazy Post Office/Library/PackageCache/com.unity.testtools.codecoverage@1.0.1/lib/ReportGenerator/ReportGeneratorMerged.dll"
 -r:"D:/Github/LudumDare53/Crazy Post Office/Library/PackageCache/com.unity.visualscripting@1.7.8/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.EditorCoroutines.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InputSystem.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Performance.Profile-Analyzer.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.PlasticSCM.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Rider.Editor.ref.dll"
@@ -349,9 +350,13 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.ref.dll"
-"Assets/Scripts/ConveyorBelt/Sliding.cs"
-"Assets/Scripts/Spring/Spring.cs"
-"Assets/Scripts/Utility/Trigger.cs"
+"Assets/Scripts/Components/ConveyorBelt/Sliding.cs"
+"Assets/Scripts/Components/Spring/Spring.cs"
+"Assets/Scripts/Components/Utility/Trigger.cs"
+"Assets/Scripts/Levels/LevelIdentification.cs"
+"Assets/Scripts/Levels/PacketIdentification.cs"
+"Assets/Scripts/Manager/LevelEditor.cs"
+"Assets/Scripts/Manager/PackageManager.cs"
 -langversion:9.0
 
 /deterministic
