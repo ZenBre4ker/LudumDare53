@@ -47,13 +47,15 @@ public class PackageManager : MonoBehaviour
         {
             if (scene.buildIndex != 0 && scene.buildIndex < SceneManager.sceneCountInBuildSettings - 1)
             {
-                StartNextLevel();
+                StartLevel();
             }
         };
+
+        LevelManager.onLevelStarted += StartLevel;
     }
     
     // Start is called before the first frame update
-    void StartNextLevel()
+    public void StartLevel()
     {
         float currentTime = Time.time;
         levelStartTime = currentTime;

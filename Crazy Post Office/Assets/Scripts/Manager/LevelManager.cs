@@ -41,6 +41,31 @@ public class LevelManager : MonoBehaviour
 
     public static LevelAchievement[] levelAchievements;
 
+    public static Action onLevelStarted;
+    public static Action onLevelStopped;
+    public static Action onLevelPaused;
+    public static Action onLevelTested;
+
+    public static void StartLevel()
+    {
+        onLevelStarted?.Invoke();
+    }
+    
+    public static void StopLevel()
+    {
+        onLevelStopped?.Invoke();
+    }
+    
+    public static void PauseLevel()
+    {
+        onLevelPaused?.Invoke();
+    }
+    
+    public static void TestLevel()
+    {
+        onLevelTested?.Invoke();
+    }
+    
     private void Start()
     {
         levelAchievements = new LevelAchievement[SceneManager.sceneCountInBuildSettings];
@@ -66,6 +91,7 @@ public class LevelManager : MonoBehaviour
         LevelAchievement levelAchievement = levelAchievements[currentSceneIndex];
         levelAchievement ??= new LevelAchievement();
         levelAchievement.AddBetterStats(newAchievement);
+        levelAchievements[currentSceneIndex] = levelAchievement;
         LoadNextScene();
     }
     
