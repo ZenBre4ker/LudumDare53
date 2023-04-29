@@ -44,6 +44,7 @@ public class LevelManager : MonoBehaviour
     public static Action onLevelStarted;
     public static Action onLevelStopped;
     public static Action onLevelPaused;
+    public static Action onLevelUnpaused;
     public static Action onLevelTested;
 
     public static void StartLevel()
@@ -56,9 +57,16 @@ public class LevelManager : MonoBehaviour
         onLevelStopped?.Invoke();
     }
     
-    public static void PauseLevel()
+    public static void EnablePauseLevel(bool enable)
     {
-        onLevelPaused?.Invoke();
+        if (enable)
+        {
+            onLevelPaused?.Invoke();
+        }
+        else
+        {
+            onLevelUnpaused?.Invoke();
+        }
     }
     
     public static void TestLevel()

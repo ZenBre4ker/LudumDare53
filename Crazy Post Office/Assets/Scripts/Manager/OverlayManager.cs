@@ -13,6 +13,8 @@ public class OverlayManager : MonoBehaviour
     public GameObject testButton;
 
     public GameObject pauseButton;
+
+    private bool isPaused = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -55,26 +57,29 @@ public class OverlayManager : MonoBehaviour
     public void StartPressed()
     {
         EnableRun(true);
+        isPaused = false;
+        
+        LevelManager.StartLevel();
     }
 
     public void StopPressed()
     {
         EnableRun(false);
+        isPaused = false;
+        
+        LevelManager.StopLevel();
     }
 
     public void PausePressed()
     {
-        
+        isPaused = !isPaused;
+        LevelManager.EnablePauseLevel(isPaused);
     }
 
     public void TestPressed()
     {
-        EnableTestRun();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        EnableTestRun(true);
+        isPaused = false;
+        LevelManager.TestLevel();
     }
 }

@@ -39,33 +39,48 @@ public class PackageManager : MonoBehaviour
     private int stillPackages = 0;
 
     private float levelStartTime;
-    private bool levelOver = true;
+    private float pauseStartTime;
+    private bool levelActive = false;
 
     void Start()
     {
+        sentPackageObjects = new Dictionary<int, GameObject>();
+        
         SceneManager.sceneLoaded += (scene, mode) =>
         {
             if (scene.buildIndex != 0 && scene.buildIndex < SceneManager.sceneCountInBuildSettings - 1)
             {
-                StartLevel();
+                SetupLevel();
             }
         };
 
         LevelManager.onLevelStarted += StartLevel;
+        LevelManager.onLevelTested += () =>
+        {
+            ResetLevel();
+            TrySpawnPackages(true);
+        };
+        LevelManager.onLevelStopped += ResetLevel;
+        LevelManager.onLevelPaused += () =>
+        {
+            EnablePauseLevel(true);
+        };
+        LevelManager.onLevelUnpaused += () =>
+        {
+            EnablePauseLevel(false);
+        };
     }
     
     // Start is called before the first frame update
     public void StartLevel()
     {
-        float currentTime = Time.time;
-        levelStartTime = currentTime;
-        lastStillCheckTime = currentTime;
+        ResetLevel();
         
-        sentPackages = 0;
-        receivedPackages = 0;
-        
-        sentPackageObjects = new Dictionary<int, GameObject>();
-        
+        levelActive = true;
+    }
+
+    private void SetupLevel()
+    {
         goals = GameObject.FindGameObjectsWithTag("PackageGoal");
         
         for (int i =0; i <goals.Length; i++)
@@ -90,18 +105,37 @@ public class PackageManager : MonoBehaviour
             {
                 spawnGotTriggered(info, number);
             };
-            spawnClear[i] = true;
-            lastSpawnClearTime[i] = currentTime;
         }
         
         levelSetup = GameObject.FindWithTag("LevelSetup").GetComponent<LevelIdentification>();
-
-        levelOver = false;
     }
+    
+    private void ResetLevel()
+    {
+        float currentTime = Time.time;
+        levelStartTime = currentTime;
+        lastStillCheckTime = currentTime;
+        
+        sentPackages = 0;
+        receivedPackages = 0;
 
+        for (int i = 0; i < spawns.Length; i++)
+        {
+            lastSpawnClearTime[i] = 0;
+            spawnClear[i] = true;
+        }
+
+        foreach (GameObject package in sentPackageObjects.Values)
+        {
+            Destroy(package);
+        }
+
+        sentPackageObjects = new Dictionary<int, GameObject>();
+    }
+    
     private void FixedUpdate()
     {
-        if (levelOver) return;
+        if (!levelActive) return;
         
         float currentTime = Time.time;
         
@@ -111,20 +145,7 @@ public class PackageManager : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < spawns.Length; i++)
-        {
-            if (!levelSetup.infiniteSpawns && sentPackages >= levelSetup.numberOfPackages) break;
-            
-            float deltaClearTime = currentTime - lastSpawnClearTime[i];
-            if (spawnClear[i] && deltaClearTime >= levelSetup.timeBetweenPackages )
-            {
-                spawnClear[i] = false;
-                GameObject newPackage = Instantiate(packagePrefab, spawns[i].transform.position, spawns[i].transform.rotation);
-                newPackage.GetComponent<PacketIdentification>().packetNumber = sentPackages;
-                sentPackageObjects.Add(sentPackages, newPackage);
-                sentPackages += 1;
-            }
-        }
+        TrySpawnPackages();
 
         if (!levelSetup.infiniteSpawns && levelSetup.checkStillTime && currentTime - lastStillCheckTime >= stillTimeCheckInterval)
         {
@@ -162,6 +183,31 @@ public class PackageManager : MonoBehaviour
         
     }
 
+    private void TrySpawnPackages(bool doTestRun = false)
+    {
+        int maxPackages = levelSetup.numberOfPackages;
+
+        if (doTestRun)
+        {
+            maxPackages = spawnClear.Length;
+        }
+        
+        for (int i = 0; i < spawns.Length; i++)
+        {
+            if (!levelSetup.infiniteSpawns && sentPackages >= maxPackages) break;
+            
+            float deltaClearTime = Time.time - lastSpawnClearTime[i];
+            if (spawnClear[i] && deltaClearTime >= levelSetup.timeBetweenPackages )
+            {
+                spawnClear[i] = false;
+                GameObject newPackage = Instantiate(packagePrefab, spawns[i].transform.position, spawns[i].transform.rotation);
+                newPackage.GetComponent<PacketIdentification>().packetNumber = sentPackages;
+                sentPackageObjects.Add(sentPackages, newPackage);
+                sentPackages += 1;
+            }
+        }
+    }
+
     private void goalGotTriggered(Trigger.TriggerInfo info, int goalNumber)
     {
         if (!info.detectedCollider.gameObject.CompareTag("Package") || !info.isEntered) return;
@@ -190,14 +236,40 @@ public class PackageManager : MonoBehaviour
         }
     }
 
-    private void LevelOver(levelOverReason reason)
+    private void EnablePauseLevel(bool enable)
     {
-        levelOver = true;
-
+        levelActive = !enable;
+        
         foreach (GameObject package in sentPackageObjects.Values)
         {
-            package.GetComponent<Rigidbody>().isKinematic = true;
+            Rigidbody rb =package.GetComponent<Rigidbody>();
+            rb.isKinematic = enable;
+            PacketIdentification id = package.GetComponent<PacketIdentification>();
+            if (enable)
+            {
+                id.lastMovementSpeed = rb.velocity;
+                id.lastRotationSpeed = rb.angularVelocity;
+            }
+            else
+            {
+                rb.velocity = id.lastMovementSpeed;
+                rb.angularVelocity = id.lastRotationSpeed;
+            }
         }
+
+        if (enable)
+        {
+            pauseStartTime = Time.time;
+        }
+        else
+        {
+            levelStartTime += Time.time - pauseStartTime;
+        }
+    }
+    
+    private void LevelOver(levelOverReason reason)
+    {
+        EnablePauseLevel(true);
 
         notifyOnLevelOver?.Invoke(new LevelManager.LevelAchievement()
         {
