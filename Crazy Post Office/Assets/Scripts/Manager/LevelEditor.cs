@@ -48,8 +48,9 @@ public class LevelEditor : MonoBehaviour
 
 			activeHitObject.transform.position = ray.GetPoint(distance);
 
-			float rotateAround = Mouse.current.scroll.y.ReadValue() / 10f;
-			activeHitObject.transform.Rotate(Vector3.forward, rotateAround);
+			int mouseScroll = Math.Sign(Mouse.current.scroll.y.ReadValue());
+				
+			activeHitObject.transform.Rotate(Vector3.forward, mouseScroll * 7.5f);
 		}
 	}
 }
