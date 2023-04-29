@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 
 public class PackageManager : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class PackageManager : MonoBehaviour
         AllPackagesStill,
         TimeOver
     }
-    public delegate void LevelOverDelegate(int sentPackages, int receivedPackages, levelOverReason reason);
+    public delegate void LevelOverDelegate(LevelManager.LevelAchievement levelAchievement, levelOverReason reason);
     
     public GameObject packagePrefab;
     public float stillTimeCheckInterval = 0.1f;
@@ -22,7 +23,7 @@ public class PackageManager : MonoBehaviour
     public int sentPackages = 0;
     public int receivedPackages = 0;
 
-    public LevelOverDelegate notifyOnLevelOver; 
+    public static LevelOverDelegate notifyOnLevelOver; 
     
     private GameObject[] goals;
     private GameObject[] spawns;
@@ -38,14 +39,28 @@ public class PackageManager : MonoBehaviour
     private int stillPackages = 0;
 
     private float levelStartTime;
-    private bool levelOver = false;
+    private bool levelOver = true;
+
+    void Start()
+    {
+        SceneManager.sceneLoaded += (scene, mode) =>
+        {
+            if (scene.buildIndex != 0 && scene.buildIndex < SceneManager.sceneCountInBuildSettings - 1)
+            {
+                StartNextLevel();
+            }
+        };
+    }
     
     // Start is called before the first frame update
-    void Start()
+    void StartNextLevel()
     {
         float currentTime = Time.time;
         levelStartTime = currentTime;
         lastStillCheckTime = currentTime;
+        
+        sentPackages = 0;
+        receivedPackages = 0;
         
         sentPackageObjects = new Dictionary<int, GameObject>();
         
@@ -78,13 +93,15 @@ public class PackageManager : MonoBehaviour
         }
         
         levelSetup = GameObject.FindWithTag("LevelSetup").GetComponent<LevelIdentification>();
+
+        levelOver = false;
     }
 
     private void FixedUpdate()
     {
-        float currentTime = Time.time;
-
         if (levelOver) return;
+        
+        float currentTime = Time.time;
         
         if (!levelSetup.infiniteSpawns && currentTime - levelStartTime > levelSetup.timeForLevelCompletion)
         {
@@ -180,7 +197,13 @@ public class PackageManager : MonoBehaviour
             package.GetComponent<Rigidbody>().isKinematic = true;
         }
 
-        notifyOnLevelOver?.Invoke(sentPackages, receivedPackages, reason);
+        notifyOnLevelOver?.Invoke(new LevelManager.LevelAchievement()
+        {
+            availablePackages = levelSetup.numberOfPackages,
+            sentPackages = sentPackages,
+            receivedPackages = receivedPackages,
+            levelTime = Time.time - levelStartTime
+        }, reason);
         
         Debug.Log($"Level is over because: {reason}");
     }

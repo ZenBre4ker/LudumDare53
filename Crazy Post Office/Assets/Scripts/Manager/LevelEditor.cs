@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class LevelEditor : MonoBehaviour
 {
@@ -12,9 +13,15 @@ public class LevelEditor : MonoBehaviour
 	private GameObject activeHitObject;
 	private void Start()
 	{
-		mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 		mainPlane = new Plane(Vector3.zero, Vector3.right, Vector3.up);
+		
+		mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 		PlayerManager.onUserFire += OnFire;
+		SceneManager.sceneLoaded += (arg0, mode) =>
+		{
+			mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+			PlayerManager.onUserFire += OnFire;
+		};
 	}
 
 	public void OnFire()
