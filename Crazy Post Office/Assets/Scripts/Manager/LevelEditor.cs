@@ -11,6 +11,7 @@ public class LevelEditor : MonoBehaviour
 	private Plane mainPlane;
 
 	private GameObject activeHitObject;
+	private bool isStarted = false;
 	private void Start()
 	{
 		mainPlane = new Plane(Vector3.zero, Vector3.right, Vector3.up);
@@ -19,9 +20,25 @@ public class LevelEditor : MonoBehaviour
 		PlayerManager.onUserFire += OnFire;
 		SceneManager.sceneLoaded += (arg0, mode) =>
 		{
+			isStarted = false;
 			mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 			PlayerManager.onUserFire += OnFire;
 		};
+		
+		
+		LevelManager.onLevelStarted += () =>
+		{
+			isStarted = true;
+		};
+		LevelManager.onLevelStopped += () =>
+		{
+			isStarted = false;
+		};
+		LevelManager.onLevelTested += () =>
+		{
+			isStarted = true;
+		};
+
 	}
 
 	public void OnFire()
@@ -46,6 +63,8 @@ public class LevelEditor : MonoBehaviour
 		{
 			activeHitObject = null;
 		}
+
+		if (isStarted) return;
 		
 		if (activeHitObject != null && Mouse.current.leftButton.isPressed)
 		{

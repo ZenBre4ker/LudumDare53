@@ -10,21 +10,34 @@ public class Sliding : MonoBehaviour
     private Vector3 localMoveDelta;
 
     public bool shouldMove = true;
+    public bool isPaused = false;
 
     public float moveSpeed = 1f;
     // Start is called before the first frame update
     void Start()
     {
-        //parentTransform = GetComponentInParent<Transform>();
         resetMovePosition = transform.localPosition;
 
         localMoveDelta = new Vector3(0.4f/transform.lossyScale.x, 0, 0);
+        
+        LevelManager.onLevelPaused += () =>
+        {
+            isPaused = true;
+        };
+        LevelManager.onLevelUnpaused += () =>
+        {
+            isPaused = false;
+        };
+        LevelManager.onLevelStarted += () =>
+        {
+            isPaused = false;
+        };
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!shouldMove) return;
+        if (!shouldMove || isPaused) return;
 
         Vector3 globalResetPosition = parentTransform.position + transform.TransformDirection(resetMovePosition);
         gameObject.GetComponent<Rigidbody>().position = globalResetPosition;

@@ -41,6 +41,7 @@ public class PackageManager : MonoBehaviour
     private float levelStartTime;
     private float pauseStartTime;
     private bool levelActive = false;
+    private bool isTestRun = false;
 
     void Start()
     {
@@ -58,7 +59,8 @@ public class PackageManager : MonoBehaviour
         LevelManager.onLevelTested += () =>
         {
             ResetLevel();
-            TrySpawnPackages(true);
+            isTestRun = true;
+            TrySpawnPackages();
         };
         LevelManager.onLevelStopped += ResetLevel;
         LevelManager.onLevelPaused += () =>
@@ -118,6 +120,9 @@ public class PackageManager : MonoBehaviour
         
         sentPackages = 0;
         receivedPackages = 0;
+        
+        isTestRun = false;
+        levelActive = false;
 
         for (int i = 0; i < spawns.Length; i++)
         {
@@ -135,7 +140,7 @@ public class PackageManager : MonoBehaviour
     
     private void FixedUpdate()
     {
-        if (!levelActive) return;
+        if (!levelActive || isTestRun) return;
         
         float currentTime = Time.time;
         
@@ -183,14 +188,9 @@ public class PackageManager : MonoBehaviour
         
     }
 
-    private void TrySpawnPackages(bool doTestRun = false)
+    private void TrySpawnPackages()
     {
-        int maxPackages = levelSetup.numberOfPackages;
-
-        if (doTestRun)
-        {
-            maxPackages = spawnClear.Length;
-        }
+        int maxPackages = isTestRun ? spawnClear.Length : levelSetup.numberOfPackages;
         
         for (int i = 0; i < spawns.Length; i++)
         {
@@ -215,7 +215,7 @@ public class PackageManager : MonoBehaviour
         sentPackageObjects.Remove(info.detectedCollider.gameObject.GetComponent<PacketIdentification>().packetNumber);
         Destroy(info.detectedCollider.gameObject);
 
-        if (!levelSetup.infiniteSpawns && receivedPackages == levelSetup.numberOfPackages)
+        if (!isTestRun && !levelSetup.infiniteSpawns && receivedPackages == levelSetup.numberOfPackages)
         {
             LevelOver(levelOverReason.ReceivedAllPackages);
         }

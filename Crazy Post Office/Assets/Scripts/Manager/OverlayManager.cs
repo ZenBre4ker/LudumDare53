@@ -36,7 +36,7 @@ public class OverlayManager : MonoBehaviour
     public void EnableAllButtons(bool enable)
     {
         startButton.SetActive(enable);
-        stopButton.SetActive(!enable);
+        stopButton.SetActive(enable);
         testButton.SetActive(enable);
         pauseButton.SetActive(enable);
     }
@@ -47,11 +47,6 @@ public class OverlayManager : MonoBehaviour
         stopButton.SetActive(enable);
         testButton.SetActive(!enable);
         pauseButton.SetActive(enable);
-    }
-
-    public void EnableTestRun(bool enable)
-    {
-        EnableRun(enable);
     }
 
     public void StartPressed()
@@ -78,7 +73,7 @@ public class OverlayManager : MonoBehaviour
 
     public void TestPressed()
     {
-        EnableTestRun(true);
+        EnableRun(true);
         isPaused = false;
         LevelManager.TestLevel();
     }
