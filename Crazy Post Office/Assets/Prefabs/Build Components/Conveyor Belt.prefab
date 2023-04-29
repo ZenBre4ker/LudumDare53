@@ -111,6 +111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d10533c03ec31740b6816d77abcf8a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentTransform: {fileID: 4013217384741576134}
+  shouldMove: 1
   moveSpeed: 1
 --- !u!54 &4013217384144078771
 Rigidbody:

@@ -7,11 +7,13 @@ using UnityEngine.InputSystem;
 public class LevelEditor : MonoBehaviour
 {
 	private Camera mainCamera;
+	private Plane mainPlane;
 
 	private GameObject activeHitObject;
 	private void Start()
 	{
 		mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+		mainPlane = new Plane(Vector3.zero, Vector3.right, Vector3.up);
 		PlayerManager.onUserFire += OnFire;
 	}
 
@@ -41,11 +43,13 @@ public class LevelEditor : MonoBehaviour
 		if (activeHitObject != null && Mouse.current.leftButton.isPressed)
 		{
 			Vector3 mousePosition = Mouse.current.position.ReadValue();
-			Plane plane = new Plane(Vector3.zero, Vector3.right, Vector3.up);
 			Ray ray = mainCamera.ScreenPointToRay(mousePosition);
-			plane.Raycast(ray, out float distance);
+			mainPlane.Raycast(ray, out float distance);
 
 			activeHitObject.transform.position = ray.GetPoint(distance);
+
+			float rotateAround = Mouse.current.scroll.y.ReadValue() / 10f;
+			activeHitObject.transform.Rotate(Vector3.forward, rotateAround);
 		}
 	}
 }

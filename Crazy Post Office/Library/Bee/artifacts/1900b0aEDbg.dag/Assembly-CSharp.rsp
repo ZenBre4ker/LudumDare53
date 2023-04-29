@@ -114,7 +114,7 @@
 -define:ENABLE_TERRAIN
 -define:ENABLE_TILEMAP
 -define:ENABLE_TIMELINE
--define:ENABLE_LEGACY_INPUT_MANAGER
+-define:ENABLE_INPUT_SYSTEM
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
 -r:"C:/Programmieren/Unity/2021.3.5f1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreModule.dll"
@@ -331,6 +331,8 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Services.Core.Analytics.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Services.Core.Environments.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Services.Core.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Sysroot.Linux_x86_64.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.SysrootPackage.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TestTools.CodeCoverage.Editor.ref.dll"
@@ -338,6 +340,7 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.TextMeshPro.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Timeline.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Timeline.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Toolchain.Win-x86_64-Linux-x86_64.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.VisualScripting.Core.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.VisualScripting.Core.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.VisualScripting.Flow.Editor.ref.dll"
@@ -357,6 +360,7 @@
 "Assets/Scripts/Levels/PacketIdentification.cs"
 "Assets/Scripts/Manager/LevelEditor.cs"
 "Assets/Scripts/Manager/PackageManager.cs"
+"Assets/Scripts/Manager/PlayerManager.cs"
 -langversion:9.0
 
 /deterministic
