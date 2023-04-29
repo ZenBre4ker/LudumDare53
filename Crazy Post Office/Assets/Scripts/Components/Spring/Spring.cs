@@ -6,9 +6,11 @@ using UnityEngine;
 public class Spring : MonoBehaviour
 {
     public Trigger springTrigger;
+    
+    public Transform parentTransform;
+    
     private Vector3 resetMovePosition;
-    private Vector3 finalMovePosition;
-    private Vector3 globalMoveDelta;
+    private Vector3 localMoveDelta;
 
     private float OnTriggerPushPosition = 0f;
 
@@ -21,13 +23,9 @@ public class Spring : MonoBehaviour
     void Start()
     {
         startPushTime = Time.time;
-        resetMovePosition = transform.position;
+        resetMovePosition = transform.localPosition;
 
-        transform.localPosition += new Vector3(0, 2f, 0);;
-        finalMovePosition = transform.position;
-        globalMoveDelta = finalMovePosition - resetMovePosition;
-        
-        transform.position = resetMovePosition;
+        localMoveDelta = new Vector3(0, 2f, 0);;
 
         springTrigger.objectGotTriggered += gotTriggered;
     }
@@ -53,18 +51,19 @@ public class Spring : MonoBehaviour
     void FixedUpdate()
     {
         float timeDelta = Time.time - startPushTime;
+        Vector3 globalResetPosition = parentTransform.position + transform.TransformDirection(resetMovePosition);
         if (startPush)
         {
             OnTriggerPushPosition += timeDelta / pushDuration;
             OnTriggerPushPosition = Math.Clamp(OnTriggerPushPosition,0,1);
-            Vector3 moveToPosition = resetMovePosition + globalMoveDelta * OnTriggerPushPosition ;
+            Vector3 moveToPosition = globalResetPosition + transform.TransformDirection(localMoveDelta) * OnTriggerPushPosition ;
             gameObject.GetComponent<Rigidbody>().MovePosition(moveToPosition);
         }
         else
         {
             OnTriggerPushPosition -= timeDelta / pushDuration;
             OnTriggerPushPosition = Math.Clamp(OnTriggerPushPosition,0,1);
-            Vector3 moveToPosition = resetMovePosition + globalMoveDelta * OnTriggerPushPosition ;
+            Vector3 moveToPosition = globalResetPosition + transform.TransformDirection(localMoveDelta) * OnTriggerPushPosition ;
             gameObject.GetComponent<Rigidbody>().MovePosition(moveToPosition);
             //gameObject.transform.position = resetMovePosition;
         }

@@ -321,6 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   springTrigger: {fileID: 2544430109689941328}
+  parentTransform: {fileID: 2544430109707301680}
 --- !u!54 &2544430109833998673
 Rigidbody:
   m_ObjectHideFlags: 0
