@@ -16,6 +16,8 @@ public class OverlayManager : MonoBehaviour
     public GameObject pauseButton;
     public GameObject toggle3DButton;
 
+    public GameObject SoundSlider;
+
     private bool isPaused = false;
     // Start is called before the first frame update
     void Start()
@@ -43,6 +45,7 @@ public class OverlayManager : MonoBehaviour
         testButton.SetActive(enable);
         pauseButton.SetActive(enable);
         toggle3DButton.SetActive(enable);
+        SoundSlider.SetActive(enable);
     }
 
     public void EnableRun(bool enable)
@@ -91,5 +94,10 @@ public class OverlayManager : MonoBehaviour
     public void IsToggled3D(bool youAreShit = true)
     {
         PlayerManager.Singleton.ChangeTo3D(toggle3DButton.GetComponent<Toggle>().isOn);
+    }
+
+    public void SoundChanged(float soundVolume)
+    {
+        SoundManager.ChangeSoundVolume(soundVolume);
     }
 }

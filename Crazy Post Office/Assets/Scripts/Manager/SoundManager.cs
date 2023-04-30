@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -23,26 +24,15 @@ public class SoundManager : MonoBehaviour
     public List<AudioClip> PistonClips;
     public List<AudioClip> LevelOverClips;
 
-    private AudioSource[] audioSources;
-
-    private int maxAudioSources = 100;
-
-    private int nextAudioSource = 0;
+    public AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
-        if (Singleton == null) return;
+        if (Singleton != null) return;
         Singleton = this;
-
-        audioSources = new AudioSource[maxAudioSources];
-
-        for (int i = 0; i < maxAudioSources; i++)
-        {
-            audioSources[i] = new AudioSource();
-        }
     }
 
-    void PlayRandomClip(SoundType type)
+    public static void PlayRandomClip(SoundType type, float volume = 0.3f)
     {
         List<AudioClip> clips;
         switch (type)
@@ -65,10 +55,12 @@ public class SoundManager : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
+        
+        Singleton.audioSource.PlayOneShot(clips[Random.Range(0, clips.Count)], volume);
+    }
 
-        AudioSource source = audioSources[nextAudioSource++];
-        nextAudioSource %= maxAudioSources;
-        source.clip = clips[Random.Range(0, clips.Count)];
-        source.Play();
+    public static void ChangeSoundVolume(float volume)
+    {
+        Singleton.audioSource.volume = volume;
     }
 }

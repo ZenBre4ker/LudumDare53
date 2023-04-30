@@ -201,6 +201,7 @@ public class PackageManager : MonoBehaviour
             {
                 spawnClear[i] = false;
                 GameObject newPackage = Instantiate(packagePrefab, spawns[i].transform.position, spawns[i].transform.rotation);
+                SoundManager.PlayRandomClip(SoundType.PackageSent);
                 newPackage.GetComponent<PacketIdentification>().packetNumber = sentPackages;
                 sentPackageObjects.Add(sentPackages, newPackage);
                 sentPackages += 1;
@@ -214,6 +215,7 @@ public class PackageManager : MonoBehaviour
         receivedPackages += 1;
         sentPackageObjects.Remove(info.detectedCollider.gameObject.GetComponent<PacketIdentification>().packetNumber);
         Destroy(info.detectedCollider.gameObject);
+        SoundManager.PlayRandomClip(SoundType.PackageReceived);
 
         if (!isTestRun && !levelSetup.infiniteSpawns && receivedPackages == levelSetup.numberOfPackages)
         {

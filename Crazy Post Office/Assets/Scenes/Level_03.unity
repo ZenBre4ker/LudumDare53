@@ -839,7 +839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3141852447441980912, guid: a2ea9daa4bc5b054eb69dfcca511f8a4, type: 3}
       propertyPath: infiniteSpawns
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3141852447441980912, guid: a2ea9daa4bc5b054eb69dfcca511f8a4, type: 3}
       propertyPath: numberOfPackages

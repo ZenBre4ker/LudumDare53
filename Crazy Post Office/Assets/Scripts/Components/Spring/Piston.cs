@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Piston : MonoBehaviour
 {
@@ -16,7 +17,9 @@ public class Piston : MonoBehaviour
 
     private float startPushTime;
 
-    private float pushDuration = 2f;
+    private float minPushDuration = 0.5f;
+    private float maxPushDuration = 1f;
+    private float pushDuration;
 
     private bool startPush = false;
 
@@ -82,6 +85,12 @@ public class Piston : MonoBehaviour
     void FixedUpdate()
     {
         if (isPaused) return;
+
+        if (startPush && OnTriggerPushPosition <= 0)
+        {
+            pushDuration = Random.Range(minPushDuration, maxPushDuration);
+            SoundManager.PlayRandomClip(SoundType.Piston,  1 / 30f / pushDuration);
+        }
         
         float timeDelta = Time.time - startPushTime;
         Vector3 globalResetPosition = parentTransform.position + parentTransform.TransformVector(resetMovePosition);
