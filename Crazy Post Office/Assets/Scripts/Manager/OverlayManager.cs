@@ -27,6 +27,7 @@ public class OverlayManager : MonoBehaviour
             if (scene.buildIndex != 0 && scene.buildIndex < SceneManager.sceneCountInBuildSettings - 1)
             {
                 EnableAllButtons(true);
+                IsToggled3D();
             }
             else
             {
@@ -87,7 +88,7 @@ public class OverlayManager : MonoBehaviour
         IsToggled3D(enabled);
     }
     
-    public void IsToggled3D(bool youAreShit)
+    public void IsToggled3D(bool youAreShit = true)
     {
         PlayerManager.Singleton.ChangeTo3D(toggle3DButton.GetComponent<Toggle>().isOn);
     }

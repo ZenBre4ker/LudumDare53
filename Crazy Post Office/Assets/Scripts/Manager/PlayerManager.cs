@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviour
 
     public static OnFireDelegate onUserFire;
 
-    private bool is3D = false;
+    private bool is3D = true;
     
     public Vector3 cameraResetPosition;
     public Quaternion cameraResetRotation;
@@ -87,13 +87,6 @@ public class PlayerManager : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext inputAction)
     {
-        Vector2 moveVector = inputAction.ReadValue<Vector2>();
-        if (is3D)
-        {
-        }
-        else
-        {
-        }
     }
 
     private void Update()
