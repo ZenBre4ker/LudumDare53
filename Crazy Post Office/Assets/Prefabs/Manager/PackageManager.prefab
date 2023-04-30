@@ -44,5 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e770fb1f330db47aeaf5d45ee20b02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  packagePrefab: {fileID: 7292390005731706743, guid: 33e9a415533cbbe44a0bdd5a45c7b663, type: 3}
+  packagePrefab: {fileID: 96971631881089384, guid: 7f5db2e11a7a628478d90bb686b5b89d, type: 3}
+  stillTimeCheckInterval: 0.1
+  velocityNearZero: 1e-18
+  sentPackages: 0
   receivedPackages: 0
+  stillPackages: 0

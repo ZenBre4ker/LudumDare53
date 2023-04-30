@@ -14,6 +14,8 @@ public enum SoundType
     LevelOver
 }
 
+public delegate void soundChanged(float newVolume);
+
 public class SoundManager : MonoBehaviour
 {
     private static SoundManager Singleton;
@@ -25,6 +27,8 @@ public class SoundManager : MonoBehaviour
     public List<AudioClip> LevelOverClips;
 
     public AudioSource audioSource;
+
+    public static soundChanged onSoundChanged;
     // Start is called before the first frame update
     void Start()
     {
@@ -62,5 +66,6 @@ public class SoundManager : MonoBehaviour
     public static void ChangeSoundVolume(float volume)
     {
         Singleton.audioSource.volume = volume;
+        onSoundChanged?.Invoke(volume);
     }
 }

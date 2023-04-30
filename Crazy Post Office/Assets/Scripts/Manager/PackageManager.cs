@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class PackageManager : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class PackageManager : MonoBehaviour
     
     public int sentPackages = 0;
     public int receivedPackages = 0;
+
+    public Vector3 testRotation = Vector3.up;
+    public float testRot = 0f;
 
     public static LevelOverDelegate notifyOnLevelOver; 
     
@@ -203,6 +207,14 @@ public class PackageManager : MonoBehaviour
                 GameObject newPackage = Instantiate(packagePrefab, spawns[i].transform.position, spawns[i].transform.rotation);
                 SoundManager.PlayRandomClip(SoundType.PackageSent);
                 newPackage.GetComponent<PacketIdentification>().packetNumber = sentPackages;
+                newPackage.transform.Rotate(Vector3.right, -90);
+                int rotateVersion = Random.Range(0, 3);
+                newPackage.transform.Rotate(Vector3.forward, rotateVersion * 90f);
+                if (rotateVersion == 1 || rotateVersion == 3)
+                {
+                    newPackage.GetComponent<Rigidbody>().constraints -= RigidbodyConstraints.FreezeRotationX;
+                    newPackage.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezeRotationY;
+                }
                 sentPackageObjects.Add(sentPackages, newPackage);
                 sentPackages += 1;
             }
