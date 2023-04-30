@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class OverlayManager : MonoBehaviour
@@ -13,6 +14,7 @@ public class OverlayManager : MonoBehaviour
     public GameObject testButton;
 
     public GameObject pauseButton;
+    public GameObject toggle3DButton;
 
     private bool isPaused = false;
     // Start is called before the first frame update
@@ -25,6 +27,7 @@ public class OverlayManager : MonoBehaviour
             if (scene.buildIndex != 0 && scene.buildIndex < SceneManager.sceneCountInBuildSettings - 1)
             {
                 EnableAllButtons(true);
+                DoToggle3D(false);
             }
             else
             {
@@ -39,6 +42,7 @@ public class OverlayManager : MonoBehaviour
         stopButton.SetActive(enable);
         testButton.SetActive(enable);
         pauseButton.SetActive(enable);
+        toggle3DButton.SetActive(enable);
     }
 
     public void EnableRun(bool enable)
@@ -53,6 +57,7 @@ public class OverlayManager : MonoBehaviour
     {
         EnableRun(true);
         isPaused = false;
+        DoToggle3D(true);
         
         LevelManager.StartLevel();
     }
@@ -61,6 +66,7 @@ public class OverlayManager : MonoBehaviour
     {
         EnableRun(false);
         isPaused = false;
+        DoToggle3D(false);
         
         LevelManager.StopLevel();
     }
@@ -75,6 +81,18 @@ public class OverlayManager : MonoBehaviour
     {
         EnableRun(true);
         isPaused = false;
+        DoToggle3D(true);
         LevelManager.TestLevel();
+    }
+
+    public void DoToggle3D(bool enabled)
+    {
+        toggle3DButton.GetComponent<Toggle>().isOn = enabled;
+        IsToggled3D(enabled);
+    }
+    
+    public void IsToggled3D(bool youAreShit)
+    {
+        PlayerManager.Singleton.ChangeTo3D(toggle3DButton.GetComponent<Toggle>().isOn);
     }
 }
