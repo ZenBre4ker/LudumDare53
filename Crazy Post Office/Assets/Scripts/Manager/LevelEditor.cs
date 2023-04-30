@@ -79,9 +79,11 @@ public class LevelEditor : MonoBehaviour
 		{
 			Debug.Log(hitInfo.collider.gameObject.name);
 			activeHitObject = hitInfo.collider.gameObject;
-			hitOffset = activeHitObject.transform.position - hitInfo.point;
-			hitOffset.z = 0;
 			
+			Ray ray = mainCamera.ScreenPointToRay(mousePosition);
+			mainPlane.Raycast(ray, out float distance);
+			hitOffset = activeHitObject.transform.position - ray.GetPoint(distance);
+
 			oldPosition = activeHitObject.transform.position;
 			oldRotation = activeHitObject.transform.rotation;
 
@@ -156,10 +158,9 @@ public class LevelEditor : MonoBehaviour
 			if (mouseScroll != 0)
 			{
 				Vector3 inverseHitOffset = activeHitObject.transform.InverseTransformDirection(hitOffset);
-				activeHitObject.transform.Rotate(Vector3.forward, mouseScroll * 7.5f);
+				activeHitObject.transform.Rotate(activeHitObject.transform.InverseTransformDirection(Vector3.forward), mouseScroll * 7.5f);
 				hitOffset = activeHitObject.transform.TransformDirection(inverseHitOffset);
 			}
-			
 			activeHitObject.transform.position = ray.GetPoint(distance) + hitOffset;
 		}
 	}
