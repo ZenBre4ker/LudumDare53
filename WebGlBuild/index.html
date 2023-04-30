@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | Crazy Post Office</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="shortcut icon" href="WebGlBuild/TemplateData/favicon.ico">
+    <link rel="stylesheet" href="WebGlBuild/TemplateData/style.css">
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
@@ -55,13 +55,13 @@
         updateBannerVisibility();
       }
 
-      var buildUrl = "Build";
+      var buildUrl = "WebGlBuild/Build";
       var loaderUrl = buildUrl + "/WebGl.loader.js";
       var config = {
         dataUrl: buildUrl + "/WebGl.data.unityweb",
         frameworkUrl: buildUrl + "/WebGl.framework.js.unityweb",
         codeUrl: buildUrl + "/WebGl.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
+        streamingAssetsUrl: "WebGlBuild/StreamingAssets",
         companyName: "DefaultCompany",
         productName: "Crazy Post Office",
         productVersion: "0.1",
