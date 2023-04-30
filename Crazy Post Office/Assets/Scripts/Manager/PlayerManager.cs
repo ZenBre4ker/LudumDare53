@@ -27,6 +27,8 @@ public class PlayerManager : MonoBehaviour
     public float lookSpeed2D = 1f;
     public float zoomSpeed2D = 1f;
 
+    private float minHeight = 1f;
+    
     private void Start()
     {
         if (Singleton != null) return;
@@ -38,14 +40,24 @@ public class PlayerManager : MonoBehaviour
         playerInput.camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         cameraResetPosition = playerInput.camera.transform.position;
         cameraResetRotation = playerInput.camera.transform.rotation;
+
+        LimitMaxCameraHeight();
+        
         SceneManager.sceneLoaded += (arg0, mode) =>
         {
             playerInput.camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
             cameraResetPosition = playerInput.camera.transform.position;
             cameraResetRotation = playerInput.camera.transform.rotation;
+            
+            LimitMaxCameraHeight();
         };
     }
 
+    public void LimitMaxCameraHeight()
+    {
+        minHeight = playerInput.camera.orthographicSize - 0.5f;
+    }
+    
     public void ChangeTo3D(bool enable)
     {
         if (playerInput.camera == null) return;
@@ -107,43 +119,56 @@ public class PlayerManager : MonoBehaviour
             upDownMovement *= moveSpeed2D;
             playerInput.camera.transform.position +=
                 playerInput.camera.transform.TransformDirection(moveVector.x, moveVector.y + upDownMovement, 0);
-
         }
 
+        if (Mouse.current.rightButton.isPressed)
+        {
+            Vector2 mouseDelta = Mouse.current.delta.ReadValue() * deltaTime;
+        
+            //Look around
+            if (is3D)
+            {
+                mouseDelta *= lookSpeed3D;
+                playerInput.camera.transform.Rotate(Vector3.up, mouseDelta.x, Space.World);
+
+                Quaternion oldRotation = playerInput.camera.transform.rotation;
+                playerInput.camera.transform.Rotate(Vector3.right, -mouseDelta.y);
+            
+                float angle = Vector3.Angle(playerInput.camera.transform.TransformDirection(Vector3.up), Vector3.up);
+
+                if (angle > 70)
+                {
+                    playerInput.camera.transform.rotation = oldRotation;
+                }
+            }
+            else
+            {
+                mouseDelta *= lookSpeed2D;
+                Vector3 newPos = new Vector3(playerInput.camera.transform.position.x - mouseDelta.x,
+                    playerInput.camera.transform.position.y - mouseDelta.y, playerInput.camera.transform.position.z);
+                playerInput.camera.transform.position = newPos;
+            }
+        }
+        
         //Zoom
         if (!is3D && !Mouse.current.leftButton.isPressed)
         {
             float scrollValue = Mouse.current.scroll.y.ReadValue();
 
             playerInput.camera.orthographicSize = Math.Clamp(playerInput.camera.orthographicSize - scrollValue * zoomSpeed2D, 1, 1000);
-        }
-        
-        if (!Mouse.current.rightButton.isPressed) return;
 
-        Vector2 mouseDelta = Mouse.current.delta.ReadValue() * deltaTime;
-        
-        //Look around
-        if (is3D)
-        {
-            mouseDelta *= lookSpeed3D;
-            playerInput.camera.transform.Rotate(Vector3.up, mouseDelta.x, Space.World);
-
-            Quaternion oldRotation = playerInput.camera.transform.rotation;
-            playerInput.camera.transform.Rotate(Vector3.right, -mouseDelta.y);
+            float oldHeight = minHeight;
             
-            float angle = Vector3.Angle(playerInput.camera.transform.TransformDirection(Vector3.up), Vector3.up);
-
-            if (angle > 70)
-            {
-                playerInput.camera.transform.rotation = oldRotation;
-            }
+            LimitMaxCameraHeight();
+            
+            playerInput.camera.transform.position -= Vector3.up * (oldHeight - minHeight);
         }
-        else
+        
+        if (!is3D)
         {
-            mouseDelta *= lookSpeed2D;
-            Vector3 newPos = new Vector3(playerInput.camera.transform.position.x - mouseDelta.x,
-                playerInput.camera.transform.position.y - mouseDelta.y, playerInput.camera.transform.position.z);
-            playerInput.camera.transform.position = newPos;
+            playerInput.camera.transform.position = new Vector3(playerInput.camera.transform.position.x,
+                Math.Clamp(playerInput.camera.transform.position.y, minHeight, 10000f), playerInput.camera.transform.position.z);
         }
+        
     }
 }

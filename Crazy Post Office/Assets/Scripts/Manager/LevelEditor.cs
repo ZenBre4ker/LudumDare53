@@ -12,9 +12,16 @@ public class LevelEditor : MonoBehaviour
 
 	private GameObject activeHitObject;
 	private Vector3 hitOffset;
+	
+	private Vector3 oldPosition;
+	private Quaternion oldRotation;
+	
 	private bool isStarted = false;
+
+	private List<Collider> boundsList;
 	private void Start()
 	{
+		boundsList = new List<Collider>();
 		mainPlane = new Plane(Vector3.zero, Vector3.right, Vector3.up);
 		
 		mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
@@ -24,6 +31,17 @@ public class LevelEditor : MonoBehaviour
 			isStarted = false;
 			mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 			PlayerManager.onUserFire += OnFire;
+			
+			GameObject[] allObjects = FindObjectsOfType<GameObject>();
+			
+			boundsList = new List<Collider>();
+			foreach(GameObject go in allObjects)
+			{
+				if (go.activeInHierarchy && go.TryGetComponent(out Collider collider))
+				{
+					boundsList.Add(collider);
+				}
+			}
 		};
 		
 		
@@ -52,6 +70,9 @@ public class LevelEditor : MonoBehaviour
 			activeHitObject = hitInfo.collider.gameObject;
 			hitOffset = activeHitObject.transform.position - hitInfo.point;
 			hitOffset.z = 0;
+			
+			oldPosition = activeHitObject.transform.position;
+			oldRotation = activeHitObject.transform.rotation;
 		}
 		else
 		{
@@ -62,8 +83,40 @@ public class LevelEditor : MonoBehaviour
 
 	private void Update()
 	{
-		if (Mouse.current.leftButton.wasReleasedThisFrame)
+		if (activeHitObject != null && Mouse.current.leftButton.wasReleasedThisFrame)
 		{
+			Collider[] activeColliders = activeHitObject.GetComponentsInChildren<Collider>();
+
+			foreach (Collider collider in boundsList)
+			{
+				bool hasCollision = false;
+				foreach (Collider activeCollider in activeColliders)
+				{
+					if (collider == activeCollider)
+					{
+						hasCollision = true;
+						break;
+					}
+				}
+
+				if (hasCollision) continue;
+				
+				foreach (Collider activeCollider in activeColliders)
+				{
+					if (activeCollider.bounds.Intersects(collider.bounds))
+					{
+						activeHitObject.transform.position = oldPosition;
+						activeHitObject.transform.rotation = oldRotation;
+					
+						Debug.Log($"Collided with {collider.gameObject.name}");
+						hasCollision = true;
+						break;
+					}
+				}
+
+				if (hasCollision) break;
+			}
+			
 			activeHitObject = null;
 		}
 
