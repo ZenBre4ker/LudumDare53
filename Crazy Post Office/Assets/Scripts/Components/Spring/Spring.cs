@@ -43,6 +43,15 @@ public class Spring : MonoBehaviour
         {
             isPaused = false;
         };
+        LevelManager.onLevelStopped += () =>
+        {
+            OnTriggerPushPosition = 0f;
+            isPaused = true;
+        };
+        LevelManager.onLevelTested += () =>
+        {
+            isPaused = false;
+        };
     }
 
     private void gotTriggered(Trigger.TriggerInfo info)

@@ -27,7 +27,6 @@ public class OverlayManager : MonoBehaviour
             if (scene.buildIndex != 0 && scene.buildIndex < SceneManager.sceneCountInBuildSettings - 1)
             {
                 EnableAllButtons(true);
-                DoToggle3D(false);
             }
             else
             {
@@ -57,7 +56,6 @@ public class OverlayManager : MonoBehaviour
     {
         EnableRun(true);
         isPaused = false;
-        DoToggle3D(true);
         
         LevelManager.StartLevel();
     }
@@ -66,7 +64,6 @@ public class OverlayManager : MonoBehaviour
     {
         EnableRun(false);
         isPaused = false;
-        DoToggle3D(false);
         
         LevelManager.StopLevel();
     }
@@ -81,7 +78,6 @@ public class OverlayManager : MonoBehaviour
     {
         EnableRun(true);
         isPaused = false;
-        DoToggle3D(true);
         LevelManager.TestLevel();
     }
 
