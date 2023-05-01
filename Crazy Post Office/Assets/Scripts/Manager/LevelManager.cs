@@ -96,8 +96,8 @@ public class LevelManager : MonoBehaviour
 
     private void EndLevel(LevelAchievement newAchievement, PackageManager.levelOverReason reason)
     {
-        LevelAchievement levelAchievement = levelAchievements[currentSceneIndex];
-        levelAchievement ??= new LevelAchievement();
+        //LevelAchievement levelAchievement = levelAchievements[currentSceneIndex];
+        LevelAchievement levelAchievement = new LevelAchievement();
         levelAchievement.AddBetterStats(newAchievement);
         levelAchievements[currentSceneIndex] = levelAchievement;
         LoadNextScene();

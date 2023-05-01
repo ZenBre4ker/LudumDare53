@@ -14,6 +14,8 @@ public class OverlayManager : MonoBehaviour
     public GameObject testButton;
 
     public GameObject pauseButton;
+
+    public GameObject skipButton;
     public GameObject toggle3DButton;
 
     public GameObject SoundSlider;
@@ -46,6 +48,7 @@ public class OverlayManager : MonoBehaviour
         pauseButton.SetActive(enable);
         toggle3DButton.SetActive(enable);
         SoundSlider.SetActive(enable);
+        skipButton.SetActive(enable);
     }
 
     public void EnableRun(bool enable)
@@ -99,5 +102,10 @@ public class OverlayManager : MonoBehaviour
     public void SoundChanged(float soundVolume)
     {
         SoundManager.ChangeSoundVolume(soundVolume);
+    }
+
+    public void skipLevel()
+    {
+        PackageManager.Singleton.LevelOver(PackageManager.levelOverReason.skippedLevel);
     }
 }

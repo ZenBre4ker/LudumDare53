@@ -77,7 +77,6 @@ public class LevelEditor : MonoBehaviour
 
 		if (Physics.Raycast(mainCamera.ScreenPointToRay(mousePosition), out RaycastHit hitInfo) && hitInfo.collider.gameObject.CompareTag("Editable"))
 		{
-			Debug.Log(hitInfo.collider.gameObject.name);
 			activeHitObject = hitInfo.collider.gameObject;
 			
 			Ray ray = mainCamera.ScreenPointToRay(mousePosition);
@@ -107,7 +106,6 @@ public class LevelEditor : MonoBehaviour
 
 				void objectGotTriggered(Trigger.TriggerInfo info)
 				{
-					Debug.Log($"{go.name} was triggered.");
 					colliderGotTriggered(myNumber, info);
 				}
 

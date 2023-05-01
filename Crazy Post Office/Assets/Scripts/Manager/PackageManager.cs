@@ -13,9 +13,12 @@ public class PackageManager : MonoBehaviour
     {
         ReceivedAllPackages,
         AllPackagesStill,
-        TimeOver
+        TimeOver,
+        skippedLevel
     }
     public delegate void LevelOverDelegate(LevelManager.LevelAchievement levelAchievement, levelOverReason reason);
+
+    public static PackageManager Singleton;
     
     public GameObject packagePrefab;
     public float stillTimeCheckInterval = 0.1f;
@@ -49,6 +52,11 @@ public class PackageManager : MonoBehaviour
 
     void Start()
     {
+        if (Singleton == null)
+        {
+            Singleton = this;
+        }
+        
         sentPackageObjects = new Dictionary<int, GameObject>();
         
         SceneManager.sceneLoaded += (scene, mode) =>
@@ -281,7 +289,7 @@ public class PackageManager : MonoBehaviour
         }
     }
     
-    private void LevelOver(levelOverReason reason)
+    public void LevelOver(levelOverReason reason)
     {
         EnablePauseLevel(true);
 

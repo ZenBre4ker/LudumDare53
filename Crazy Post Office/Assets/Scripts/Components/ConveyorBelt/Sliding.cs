@@ -10,7 +10,7 @@ public class Sliding : MonoBehaviour
     private Vector3 localMoveDelta;
 
     public bool shouldMove = true;
-    public bool isPaused = false;
+    public bool isPaused = true;
 
     public float moveSpeed = 1f;
 
@@ -33,6 +33,14 @@ public class Sliding : MonoBehaviour
             isPaused = false;
         };
         LevelManager.onLevelStarted += () =>
+        {
+            isPaused = false;
+        };
+        LevelManager.onLevelStopped += () =>
+        {
+            isPaused = true;
+        };
+        LevelManager.onLevelTested += () =>
         {
             isPaused = false;
         };

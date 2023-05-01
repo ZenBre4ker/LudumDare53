@@ -17,8 +17,8 @@ public class Piston : MonoBehaviour
 
     private float startPushTime;
 
-    private float minPushDuration = 0.5f;
-    private float maxPushDuration = 1f;
+    private float minPushDuration = 0.7f;
+    private float maxPushDuration = 0.75f;
     private float pushDuration;
 
     private bool startPush = false;

@@ -25,7 +25,7 @@ public class EndMenu : MonoBehaviour
             neededTime += levelAchievement.levelTime;
         }
 
-        resultText.text = $"You have {receivedPackages} of {availablePackages} Packages successfully D.E.S.T.R.O.Y-ed.\n Time: {neededTime} seconds ";
+        resultText.text = $"You have {receivedPackages} of {availablePackages} Packages successfully D.E.S.T.R.O.Y-ed.\n Time: {neededTime:F} seconds ";
     }
 
     public void RestartGame()

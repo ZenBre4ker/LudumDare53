@@ -157,11 +157,12 @@ public class PlayerManager : MonoBehaviour
             playerInput.camera.transform.position -= Vector3.up * (oldHeight - minHeight);
         }
         
+        /* //To Limit Height in 2D
         if (!is3D)
         {
             playerInput.camera.transform.position = new Vector3(playerInput.camera.transform.position.x,
                 Math.Clamp(playerInput.camera.transform.position.y, minHeight, 10000f), playerInput.camera.transform.position.z);
         }
-        
+        */
     }
 }
