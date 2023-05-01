@@ -264,7 +264,10 @@ public class PackageManager : MonoBehaviour
         
         foreach (GameObject package in sentPackageObjects.Values)
         {
-            Rigidbody rb =package.GetComponent<Rigidbody>();
+            if (package == null) return;
+            
+            if(!package.TryGetComponent(out Rigidbody rb)) continue;
+            
             rb.isKinematic = enable;
             PacketIdentification id = package.GetComponent<PacketIdentification>();
             if (enable)
